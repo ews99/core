@@ -76,7 +76,7 @@ func (node *Node) Start(exitChannels ...*chan struct{}) {
 	node.nodeMessageChan = make(chan lib.NodeMessage)
 
 	// listenToNodeMessages handles the messages received from the engine through the nodeMessageChan.
-	go node.listenToNodeMessages()
+	// go node.listenToNodeMessages()
 
 	// Print config
 	node.Config.Print()
@@ -386,7 +386,8 @@ func (node *Node) listenToNodeMessages(exitChannels ...*chan struct{}) {
 		break
 	case operation := <-node.nodeMessageChan:
 		if !node.IsRunning {
-			panic("Node.listenToNodeMessages: Node is currently not running, nodeMessageChan should've not been called!")
+			glog.Error("Node.listenToNodeMessages: Node is currently not running, nodeMessageChan should've not been called!")
+			break
 		}
 		glog.Infof("Node.listenToNodeMessages: Stopping node")
 		node.Stop()
